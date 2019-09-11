@@ -1,11 +1,12 @@
-package lt.libredrop.peersdiscovery
+package lt.libredrop.peersdiscovery.network
 
-import lt.libredrop.peersdiscovery.network.Address
+import kotlinx.io.core.BytePacketBuilder
+import kotlinx.io.core.ByteReadPacket
 
 interface NetworkDriver {
     fun getAddresses(): List<Address>
 
-    fun getPort(): UInt
+    fun getPort(): Short
 
-    fun broadcast(message: ByteArray)
+    fun broadcast(message: ByteReadPacket)
 }

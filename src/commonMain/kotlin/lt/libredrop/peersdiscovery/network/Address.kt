@@ -1,5 +1,5 @@
 package lt.libredrop.peersdiscovery.network
 
-expect class Address {
-    fun getAddress(): ByteArray
-}
+expect class Address
+
+expect fun Address.getAddress(): ByteArray
