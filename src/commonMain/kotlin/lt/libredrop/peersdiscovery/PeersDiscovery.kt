@@ -20,6 +20,9 @@ class PeersDiscovery(val networkDriver: NetworkDriver) {
 //        //ip
         val ipList = networkDriver.getAddresses()
         builder.writeByte(ipList.size.toByte())
+        for (addr in ipList) {
+            builder.writeFully(addr.getAddress(), 0, 4)
+        }
 
 //        //service name
         builder.writeByte(serviceName.length.toByte())
