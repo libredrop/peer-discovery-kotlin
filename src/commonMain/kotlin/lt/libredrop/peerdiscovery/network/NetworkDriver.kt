@@ -1,6 +1,5 @@
-package lt.libredrop.peersdiscovery.network
+package lt.libredrop.peerdiscovery.network
 
-import kotlinx.io.core.BytePacketBuilder
 import kotlinx.io.core.ByteReadPacket
 
 interface NetworkDriver {

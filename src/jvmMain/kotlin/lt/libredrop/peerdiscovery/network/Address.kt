@@ -1,4 +1,4 @@
-package lt.libredrop.peersdiscovery.network
+package lt.libredrop.peerdiscovery.network
 
 import java.net.Inet4Address
 

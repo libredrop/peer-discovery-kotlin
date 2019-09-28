@@ -1,4 +1,4 @@
-package lt.libredrop.peersdiscovery.data
+package lt.libredrop.peerdiscovery.data
 
 import kotlinx.io.core.*
 
@@ -99,7 +99,7 @@ class MetaInfoBuilder {
         class ForByteArray(val value: ByteArray) : DataTypeWriter() {
             override fun size() = value.size.toLong()
 
-            override fun getBytes() = buildPacket { writeFully(value, 0, value.size) }
+            override fun getBytes() = buildPacket { writeFully(value) }
         }
     }
 }

@@ -1,6 +1,6 @@
-package lt.libredrop.peersdiscovery.data
+package lt.libredrop.peerdiscovery.data
 
-import lt.libredrop.peersdiscovery.network.Address
+import lt.libredrop.peerdiscovery.network.Address
 
 data class Peer(
     val addresses: List<Address>,
