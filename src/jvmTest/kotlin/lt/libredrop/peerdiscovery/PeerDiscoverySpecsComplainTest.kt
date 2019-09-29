@@ -1,6 +1,13 @@
 package lt.libredrop.peerdiscovery
 
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.produce
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.io.core.ByteReadPacket
 import kotlinx.io.core.readBytes
@@ -10,11 +17,17 @@ import lt.libredrop.peerdiscovery.test.assertEqualsBytes
 import lt.libredrop.peerdiscovery.test.stubWith
 import lt.neworld.kupiter.testFactory
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 import org.yaml.snakeyaml.Yaml
 import java.io.File
+import java.net.DatagramPacket
+import java.net.DatagramSocket
+import java.util.concurrent.CancellationException
+import kotlin.coroutines.coroutineContext
+import kotlin.coroutines.resume
 
-class SpecsComplaintTest {
+class PeerDiscoverySpecsComplainTest {
     val yaml = Yaml()
 
     val testDataDir = File("specs/testData")
@@ -25,10 +38,11 @@ class SpecsComplaintTest {
             test(file.nameWithoutExtension) {
                 val networkDriver: NetworkDriver = mock {
                     on { getAddresses() } doReturn emptyList()
-                    onGeneric { getPort() } doReturn 0
+                    onGeneric { getFreePort() } doReturn 0
                 }
 
-                val fixture = PeerDiscovery(networkDriver)
+                val port: UShort = 5530u
+                val fixture = PeerDiscovery(networkDriver, port)
 
                 runBlockingTest {
                     val data: TestData = yaml.loadAs(file.inputStream(), TestData::class.java)
@@ -40,8 +54,8 @@ class SpecsComplaintTest {
                     assertEquals(emptyList<Throwable>(), uncaughtExceptions)
 
                     val captor = argumentCaptor<ByteReadPacket>()
-                    verify(networkDriver).broadcast(captor.capture())
-                    assertEqualsBytes(data.getResultBinary(), captor.firstValue.readBytes())
+                    verify(networkDriver).broadcast(captor.capture(), port)
+                    assertEqualsBytes(data.getResultBinary().readBytes(), captor.firstValue.readBytes())
                 }
             }
         }

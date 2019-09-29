@@ -1,6 +1,7 @@
 package lt.libredrop.peerdiscovery.network
 
 import java.nio.ByteBuffer
+import java.util.UUID
 
 actual typealias UUID = java.util.UUID
 
@@ -12,6 +13,11 @@ actual fun UUID.toByteArray(): ByteArray {
     return bb.array()
 }
 
-actual fun ByteArray.toUUID(): UUID = java.util.UUID.nameUUIDFromBytes(this)
+actual fun ByteArray.toUUID(): UUID {
+    val bb = ByteBuffer.wrap(this)
+    val high = bb.long
+    val low = bb.long
+    return UUID(high, low)
+}
 
 actual fun randomUUID(): UUID = UUID.randomUUID()

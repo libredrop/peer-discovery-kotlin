@@ -62,7 +62,7 @@ class MetaInfoBuilder {
             writePacket(values.build())
         }
 
-        return MetaInfo(packet)
+        return MetaInfo(packet.readBytes())
     }
 
     companion object {
