@@ -11,7 +11,7 @@ import java.util.*
 
 class TestData {
     var serviceName: String = ""
-    var port: Short = 0
+    var port: Int = 0
     var result: String = ""
     var ip: List<String> = emptyList()
     var meta: Map<String, Any> = emptyMap()

@@ -1,8 +1,7 @@
 package lt.libredrop.peerdiscovery
 
-import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.flow.Flow
 import lt.libredrop.peerdiscovery.data.MetaInfo
-import lt.libredrop.peerdiscovery.data.MetaInfoBuilder
 import lt.libredrop.peerdiscovery.data.Peer
 import lt.libredrop.peerdiscovery.network.NetworkDriver
 import lt.libredrop.peerdiscovery.network.TransportProtocol
@@ -15,8 +14,23 @@ class PeerDiscovery(private val networkDriver: NetworkDriver, private val port: 
         uuid: UUID = randomUUID(),
         metainfo: MetaInfo = MetaInfo.EMPTY,
         transportProtocol: TransportProtocol = TransportProtocol.TCP
-    ): ReceiveChannel<Peer> {
-        val thisPeer = Peer(
+    ): Flow<Peer> {
+        broadcast(uuid, serviceName, transportProtocol, metainfo)
+
+        return listen()
+    }
+
+    internal fun listen(): Flow<Peer> {
+        return networkDriver.listenForPeers(port)
+    }
+
+    internal fun broadcast(
+        uuid: UUID,
+        serviceName: String,
+        transportProtocol: TransportProtocol,
+        metainfo: MetaInfo
+    ) {
+        val peer = Peer(
             addresses = networkDriver.getAddresses(),
             port = networkDriver.getFreePort().toUShort(),
             uuid = uuid,
@@ -25,8 +39,6 @@ class PeerDiscovery(private val networkDriver: NetworkDriver, private val port: 
             metaInfo = metainfo
         )
 
-        networkDriver.broadcast(thisPeer.createBinaryMessage(), port)
-
-        return networkDriver.listenForPeers(port.toUShort())
+        networkDriver.broadcast(peer, port)
     }
 }

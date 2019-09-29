@@ -1,28 +1,19 @@
 package lt.libredrop.peerdiscovery
 
 import com.nhaarman.mockitokotlin2.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.produce
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.io.core.ByteReadPacket
 import kotlinx.io.core.readBytes
+import lt.libredrop.peerdiscovery.data.Peer
 import lt.libredrop.peerdiscovery.network.NetworkDriver
 import lt.libredrop.peerdiscovery.test.TestData
 import lt.libredrop.peerdiscovery.test.assertEqualsBytes
 import lt.libredrop.peerdiscovery.test.stubWith
 import lt.neworld.kupiter.testFactory
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 import org.yaml.snakeyaml.Yaml
 import java.io.File
-import java.net.DatagramPacket
-import java.net.DatagramSocket
-import java.util.concurrent.CancellationException
-import kotlin.coroutines.coroutineContext
-import kotlin.coroutines.resume
 
 class PeerDiscoverySpecsComplainTest {
     val yaml = Yaml()
@@ -36,6 +27,7 @@ class PeerDiscoverySpecsComplainTest {
                 val networkDriver: NetworkDriver = mock {
                     on { getAddresses() } doReturn emptyList()
                     onGeneric { getFreePort() } doReturn 0
+                    on { listenForPeers(any()) } doReturn emptyFlow()
                 }
 
                 val port: Short = 5530
@@ -50,9 +42,12 @@ class PeerDiscoverySpecsComplainTest {
 
                     assertEquals(emptyList<Throwable>(), uncaughtExceptions)
 
-                    val captor = argumentCaptor<ByteReadPacket>()
+                    val captor = argumentCaptor<Peer>()
                     verify(networkDriver).broadcast(captor.capture(), eq(port))
-                    assertEqualsBytes(data.getResultBinary().readBytes(), captor.firstValue.readBytes())
+                    assertEqualsBytes(
+                        data.getResultBinary().readBytes(),
+                        captor.firstValue.createBinaryMessage().readBytes()
+                    )
                 }
             }
         }

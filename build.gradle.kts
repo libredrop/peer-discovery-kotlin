@@ -54,6 +54,7 @@ kotlin {
         }
         val jvmTest by getting {
             dependencies {
+                implementation(kotlin("test-junit5"))
                 implementation("org.yaml:snakeyaml:${Versions.snakeyaml}")
                 runtimeOnly("org.junit.jupiter:junit-jupiter-engine:${Versions.junit5Version}")
                 implementation("org.junit.jupiter:junit-jupiter-api:${Versions.junit5Version}")

@@ -1,9 +1,9 @@
 package lt.libredrop.peerdiscovery.test
 
-import org.junit.jupiter.api.Assertions
+import kotlin.test.assertEquals
 
 fun assertEqualsBytes(expected: ByteArray, actual: ByteArray) {
-    Assertions.assertEquals(expected.toHexText(), actual.toHexText())
+    assertEquals(expected.toHexText(), actual.toHexText())
 }
 
 fun ByteArray.toHexText(): String {

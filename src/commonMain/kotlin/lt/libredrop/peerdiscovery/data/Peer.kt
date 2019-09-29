@@ -4,12 +4,12 @@ import kotlinx.io.core.*
 import lt.libredrop.peerdiscovery.network.*
 
 data class Peer(
-    val addresses: List<Address>,
-    val port: UShort,
-    val uuid: UUID,
-    val serviceName: String,
-    val transportProtocol: TransportProtocol,
-    val metaInfo: MetaInfo
+    val addresses: List<Address> = emptyList(),
+    val port: UShort = 0u,
+    val uuid: UUID = randomUUID(),
+    val serviceName: String = "",
+    val transportProtocol: TransportProtocol = TransportProtocol.TCP,
+    val metaInfo: MetaInfo = MetaInfo.EMPTY
 ) {
     fun createBinaryMessage(): ByteReadPacket {
         val builder = BytePacketBuilder()

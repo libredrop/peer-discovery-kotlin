@@ -1,20 +1,19 @@
 package lt.libredrop.peerdiscovery.network
 
-import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.io.core.ByteReadPacket
 import lt.libredrop.peerdiscovery.data.Peer
 
-interface NetworkDriver {
+expect class NetworkDriver constructor() {
     fun getAddresses(): List<Address>
 
-    fun getFreePort(): Short
+    fun getFreePort(): Int
 
-    fun broadcast(message: ByteReadPacket, port: Short)
+    fun broadcast(peer: Peer, port: Short)
 
     /**
      * Listens for all peers.
-     * You must [ReceiveChannel.cancel] after you are finished listening for peers.
-     * Otherwise connection will not be closed and leaked.
+     * Connection will be closed after flow is consumed.
      */
-    fun listenForPeers(port: UShort): ReceiveChannel<Peer>
+    fun listenForPeers(port: Short): Flow<Peer>
 }
