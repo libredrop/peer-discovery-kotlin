@@ -1,9 +1,6 @@
 package lt.libredrop.peerdiscovery
 
-import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.produce
 import kotlinx.coroutines.flow.collect
@@ -41,7 +38,7 @@ class PeerDiscoverySpecsComplainTest {
                     onGeneric { getFreePort() } doReturn 0
                 }
 
-                val port: UShort = 5530u
+                val port: Short = 5530
                 val fixture = PeerDiscovery(networkDriver, port)
 
                 runBlockingTest {
@@ -54,7 +51,7 @@ class PeerDiscoverySpecsComplainTest {
                     assertEquals(emptyList<Throwable>(), uncaughtExceptions)
 
                     val captor = argumentCaptor<ByteReadPacket>()
-                    verify(networkDriver).broadcast(captor.capture(), port)
+                    verify(networkDriver).broadcast(captor.capture(), eq(port))
                     assertEqualsBytes(data.getResultBinary().readBytes(), captor.firstValue.readBytes())
                 }
             }

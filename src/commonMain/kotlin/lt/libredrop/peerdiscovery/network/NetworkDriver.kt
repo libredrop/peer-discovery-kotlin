@@ -9,7 +9,7 @@ interface NetworkDriver {
 
     fun getFreePort(): Short
 
-    fun broadcast(message: ByteReadPacket, port: UShort)
+    fun broadcast(message: ByteReadPacket, port: Short)
 
     /**
      * Listens for all peers.
