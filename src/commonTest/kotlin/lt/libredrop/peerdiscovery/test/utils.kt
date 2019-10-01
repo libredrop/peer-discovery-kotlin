@@ -1,3 +1,5 @@
 package lt.libredrop.peerdiscovery.test
 
-expect fun runTest(body: suspend () -> Unit)
+import kotlinx.coroutines.CoroutineScope
+
+expect fun runTest(body: suspend CoroutineScope.() -> Unit)

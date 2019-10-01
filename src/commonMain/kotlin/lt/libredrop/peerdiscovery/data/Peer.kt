@@ -46,6 +46,8 @@ data class Peer(
         fun fromBinary(data: ByteReadPacket): Peer {
             val version = data.readByte()
 
+            check(version == 1.toByte()) { "Only version v1 is supported" }
+
             val uuid = data.readBytes(16).toUUID()
 
             val serviceNameLength = data.readUByte()

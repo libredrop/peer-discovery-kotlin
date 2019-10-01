@@ -54,6 +54,10 @@ class MetaInfo internal constructor(internal val data: ByteArray) {
         return map.getValue(key)
     }
 
+    fun validateMetaInfo(): Boolean {
+        return map.size >= 0
+    }
+
     override fun toString(): String {
         return "MetaInfo([${map.keys.joinToString(", ")}])"
     }

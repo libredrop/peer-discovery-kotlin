@@ -9,11 +9,11 @@ expect class NetworkDriver constructor() {
 
     fun getFreePort(): Int
 
-    fun broadcast(peer: Peer, port: Short)
+    suspend fun broadcast(peer: Peer, port: Int)
 
     /**
      * Listens for all peers.
      * Connection will be closed after flow is consumed.
      */
-    fun listenForPeers(port: Short): Flow<Peer>
+    fun listenForPeers(port: Int): Flow<Peer>
 }

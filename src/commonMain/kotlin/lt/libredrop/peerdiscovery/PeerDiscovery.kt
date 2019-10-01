@@ -8,7 +8,7 @@ import lt.libredrop.peerdiscovery.network.TransportProtocol
 import lt.libredrop.peerdiscovery.network.UUID
 import lt.libredrop.peerdiscovery.network.randomUUID
 
-class PeerDiscovery(private val networkDriver: NetworkDriver, private val port: Short = 5530) {
+class PeerDiscovery(private val networkDriver: NetworkDriver, private val port: Int = 5530) {
     suspend fun start(
         serviceName: String,
         uuid: UUID = randomUUID(),
@@ -24,7 +24,7 @@ class PeerDiscovery(private val networkDriver: NetworkDriver, private val port: 
         return networkDriver.listenForPeers(port)
     }
 
-    internal fun broadcast(
+    internal suspend fun broadcast(
         uuid: UUID,
         serviceName: String,
         transportProtocol: TransportProtocol,

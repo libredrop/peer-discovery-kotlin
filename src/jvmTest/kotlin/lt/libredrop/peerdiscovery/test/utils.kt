@@ -1,6 +1,7 @@
 package lt.libredrop.peerdiscovery.test
 
 import com.nhaarman.mockitokotlin2.whenever
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.runBlocking
 import lt.libredrop.peerdiscovery.network.NetworkDriver
 import java.net.Inet4Address
@@ -10,7 +11,7 @@ fun NetworkDriver.stubWith(testData: TestData) {
     whenever(getFreePort()).thenReturn(testData.port)
 }
 
-actual fun runTest(body: suspend () -> Unit) {
+actual fun runTest(body: suspend CoroutineScope.() -> Unit) {
     runBlocking {
         body()
     }
