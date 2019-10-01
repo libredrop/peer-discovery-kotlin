@@ -30,7 +30,7 @@ class PeerDiscoverySpecsComplainTest {
                     on { listenForPeers(any()) } doReturn emptyFlow()
                 }
 
-                val port: Int = 5530
+                val port: Int = 5330
                 val fixture = PeerDiscovery(networkDriver, port)
 
                 runBlockingTest {

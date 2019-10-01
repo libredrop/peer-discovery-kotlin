@@ -13,7 +13,7 @@ import java.net.Inet4Address
 class NetworkDriverJvmTest {
     val fixture = NetworkDriver()
 
-    val port = 5530
+    val port = 5330
 
     @Test
     fun invalidPackages_shouldBeSkipped() = runBlocking {

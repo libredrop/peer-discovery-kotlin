@@ -15,7 +15,7 @@ import kotlin.test.assertTrue
 class NetworkDriverTest {
     val fixture = NetworkDriver()
 
-    val port = 5530
+    val port = 5330
 
     @Test
     fun freePort_mustBeAbove1024() {
