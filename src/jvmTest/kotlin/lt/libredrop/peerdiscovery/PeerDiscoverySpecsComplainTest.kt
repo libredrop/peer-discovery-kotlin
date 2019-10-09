@@ -30,8 +30,11 @@ class PeerDiscoverySpecsComplainTest {
                     on { listenForPeers(any()) } doReturn emptyFlow()
                 }
 
-                val port: Int = 5330
-                val fixture = PeerDiscovery(networkDriver, port)
+                val port = 5330
+                val fixture = PeerDiscovery.Builder()
+                    .networkDriver(networkDriver)
+                    .port(port)
+                    .build()
 
                 runBlockingTest {
                     val data: TestData = yaml.loadAs(file.inputStream(), TestData::class.java)

@@ -10,6 +10,7 @@ object Versions {
     const val mockitoKotlin = "2.2.0"
     const val kupiter = "1.0.0"
     const val kotlinxIo = "0.1.14"
+    const val awaitality = "4.0.1"
 }
 
 group = "lt.libredrop"
@@ -64,6 +65,7 @@ kotlin {
                 implementation("org.mockito:mockito-inline:${Versions.mockito}")
                 implementation("com.nhaarman.mockitokotlin2:mockito-kotlin:${Versions.mockitoKotlin}")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}")
+                implementation("org.awaitility:awaitility-kotlin:${Versions.awaitality}")
             }
         }
     }

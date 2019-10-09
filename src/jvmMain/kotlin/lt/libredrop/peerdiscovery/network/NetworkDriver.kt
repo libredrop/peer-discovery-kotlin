@@ -13,7 +13,10 @@ import java.net.*
 
 actual class NetworkDriver {
     actual fun getAddresses(): List<Address> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return NetworkInterface.getNetworkInterfaces().asSequence()
+            .filter { !it.isLoopback && it.isUp }
+            .mapNotNull { it.inetAddresses as? Inet4Address? }
+            .toList()
     }
 
     actual fun getFreePort(): Int {
