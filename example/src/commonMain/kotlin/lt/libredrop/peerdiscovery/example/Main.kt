@@ -3,9 +3,11 @@ package lt.libredrop.peerdiscovery.example
 import kotlinx.cli.CommandLineInterface
 import kotlinx.cli.parse
 import kotlinx.cli.positionalArgument
-import lt.libredrop.peerdiscovery.PeerDiscovery
+import lt.libredrop.peerdiscovery.data.MetaInfoBuilder
 
 fun main(args: Array<String>) {
+    MetaInfoBuilder().build()
+
     val cli = CommandLineInterface("kotlin MainKt")
 
     val serviceName by cli.positionalArgument(
@@ -18,13 +20,6 @@ fun main(args: Array<String>) {
         cli.parse(args)
     } catch (e: Exception) {
         return
-    }
-
-    val peerDiscovery = PeerDiscovery.Builder()
-        .build()
-
-    blocking {
-        peerDiscovery.start(serviceName)
     }
 }
 
