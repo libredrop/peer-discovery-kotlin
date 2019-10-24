@@ -100,4 +100,58 @@ class PeerDiscoveryTest {
 
         job.cancel()
     }
+
+    @Test
+    fun modeShout() = runTest {
+        val job = launch(Dispatchers.IO) {
+            fixture.start(serviceName, uuid, mode = PeerDiscovery.Mode.SHOUT).collect {
+                error("This peer is not expected to collect any peer")
+            }
+        }
+
+        delay(100)
+
+        verify(networkDriver).broadcast(any(), any())
+
+        job.cancel()
+    }
+
+    @Test
+    fun modeListen() = runTest {
+        val future = async(Dispatchers.IO) {
+            fixture.start(serviceName, mode = PeerDiscovery.Mode.LISTEN).take(1).toList()
+        }
+
+        delay(100)
+
+        val peer = Peer(serviceName = serviceName)
+        networkDriver.broadcast(peer, port)
+
+        withTimeout(1000) {
+            assertEquals(peer, future.await().single())
+        }
+    }
+
+    @Test
+    fun twoPeersWithNonNormalMode_onlyListenReceivesPeer() = runTest {
+        val resultOfListenPeer = async(Dispatchers.IO) {
+            fixture.start(serviceName, mode = PeerDiscovery.Mode.LISTEN).take(1).toList()
+        }
+
+        delay(100)
+
+        val job = launch(Dispatchers.IO) {
+            fixture.start(serviceName, uuid, mode = PeerDiscovery.Mode.SHOUT).collect {
+                error("This peer is not expected to collect any peer")
+            }
+        }
+
+        withTimeout(50000) {
+            val peers = resultOfListenPeer.await()
+
+            assertEquals(uuid, peers.single().uuid)
+        }
+
+        job.cancel()
+    }
 }

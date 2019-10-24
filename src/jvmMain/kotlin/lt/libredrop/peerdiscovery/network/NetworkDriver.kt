@@ -10,7 +10,6 @@ import kotlinx.io.core.readBytes
 import lt.libredrop.peerdiscovery.data.Peer
 import java.net.*
 
-
 actual class NetworkDriver {
     actual fun getAddresses(): List<Address> {
         return NetworkInterface.getNetworkInterfaces().asSequence()
@@ -31,9 +30,11 @@ actual class NetworkDriver {
         val packet = DatagramPacket(body, body.size, broadcastAddr, port)
 
         val datagramSocket = DatagramSocket()
+        datagramSocket.broadcast = true
         withContext(Dispatchers.IO) {
             datagramSocket.send(packet)
         }
+        datagramSocket.close()
     }
 
     /**
@@ -46,7 +47,6 @@ actual class NetworkDriver {
             val serverSocket = DatagramSocket(port)
 
             invokeOnClose {
-                println("socket is explicit closed")
                 serverSocket.close()
             }
 
@@ -55,9 +55,7 @@ actual class NetworkDriver {
                 while (true) {
                     val receivePacket = DatagramPacket(buffer, buffer.size)
                     withContext(Dispatchers.IO) {
-                        println("listen for new package")
                         serverSocket.receive(receivePacket)
-                        println("packet is received")
                     }
 
                     val bytePacket = buildPacket {
