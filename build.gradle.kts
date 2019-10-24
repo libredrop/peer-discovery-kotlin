@@ -1,3 +1,6 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 plugins {
     kotlin("multiplatform") version "1.3.50"
 }
@@ -77,6 +80,14 @@ tasks {
         reports {
             html.isEnabled = true
         }
+
+        testLogging {
+            events = mutableSetOf(TestLogEvent.FAILED, TestLogEvent.SKIPPED, TestLogEvent.PASSED)
+            exceptionFormat = TestExceptionFormat.FULL
+        }
+    }
+    "build"(Task::class) {
+        dependsOn("example:build")
     }
 }
 

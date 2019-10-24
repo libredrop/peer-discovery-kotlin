@@ -1,6 +1,7 @@
 package lt.libredrop.peerdiscovery
 
 import com.nhaarman.mockitokotlin2.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.io.core.readBytes
@@ -10,10 +11,12 @@ import lt.libredrop.peerdiscovery.test.TestData
 import lt.libredrop.peerdiscovery.test.assertEqualsBytes
 import lt.libredrop.peerdiscovery.test.stubWith
 import lt.neworld.kupiter.testFactory
+import org.awaitility.Awaitility
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.TestFactory
 import org.yaml.snakeyaml.Yaml
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 class PeerDiscoverySpecsComplainTest {
     val yaml = Yaml()
@@ -41,16 +44,26 @@ class PeerDiscoverySpecsComplainTest {
 
                     networkDriver.stubWith(data)
 
-                    fixture.start(data.serviceName, data.getUUID(), data.getMetaInfo(), data.getProtocolEnum())
-
-                    assertEquals(emptyList<Throwable>(), uncaughtExceptions)
+                    val job = launch {
+                        fixture.start(data.serviceName, data.getUUID(), data.getMetaInfo(), data.getProtocolEnum())
+                    }
 
                     val captor = argumentCaptor<Peer>()
-                    verify(networkDriver).broadcast(captor.capture(), eq(port))
+
+                    Awaitility.with().atMost(1, TimeUnit.SECONDS).untilAsserted {
+                        runBlocking {
+                            verify(networkDriver).broadcast(captor.capture(), eq(port))
+                        }
+                    }
+
                     assertEqualsBytes(
                         data.getResultBinary().readBytes(),
                         captor.firstValue.createBinaryMessage().readBytes()
                     )
+
+                    assertEquals(emptyList<Throwable>(), uncaughtExceptions)
+
+                    job.cancel()
                 }
             }
         }

@@ -17,7 +17,9 @@ class PeerDiscoveryTest {
 
     val serviceName = "test"
     val uuid = randomUUID()
-    val port = 5330
+    
+    //Add some randomization in order to reduce random failures
+    val port = networkDriver.getFreePort()
 
     val fixture = PeerDiscovery.Builder()
         .networkDriver(networkDriver)
