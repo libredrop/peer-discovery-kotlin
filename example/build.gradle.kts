@@ -9,7 +9,7 @@ repositories {
 }
 
 object Versions {
-    const val coroutines = "1.3.0"
+    const val coroutines = "1.3.2"
     const val cli = "0.1.0-dev-5"
 }
 

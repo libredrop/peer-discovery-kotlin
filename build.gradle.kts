@@ -3,13 +3,13 @@ plugins {
 }
 
 object Versions {
-    const val coroutines = "1.3.0"
+    const val coroutines = "1.3.2"
     const val snakeyaml = "1.25"
     const val junit5Version = "5.5.2"
-    const val mockito = "3.0.0"
+    const val mockito = "3.1.0"
     const val mockitoKotlin = "2.2.0"
     const val kupiter = "1.0.0"
-    const val kotlinxIo = "0.1.14"
+    const val kotlinxIo = "0.1.15"
     const val awaitality = "4.0.1"
 }
 
@@ -36,7 +36,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-common"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:${Versions.coroutines}")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:${Versions.coroutines}")
                 implementation("org.jetbrains.kotlinx:kotlinx-io:${Versions.kotlinxIo}")
             }
         }
@@ -49,7 +49,7 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 implementation(kotlin("stdlib"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
                 implementation("org.jetbrains.kotlinx:kotlinx-io-jvm:${Versions.kotlinxIo}")
             }
         }
