@@ -1,0 +1,8 @@
+language: java
+sudo: false # faster builds
+
+notifications:
+  email: false
+
+script:
+  - ./gradlew build
