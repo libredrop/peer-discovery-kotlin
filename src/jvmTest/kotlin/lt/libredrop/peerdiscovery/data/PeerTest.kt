@@ -12,7 +12,7 @@ import java.io.File
 class PeerTest {
     val yaml = Yaml()
 
-    val testDataDir = File("specs/testData")
+    val testDataDir = File("specs/testData/v01")
 
     @TestFactory
     fun serialize() = testFactory {

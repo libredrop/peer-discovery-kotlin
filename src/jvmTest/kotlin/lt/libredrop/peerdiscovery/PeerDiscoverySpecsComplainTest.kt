@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit
 class PeerDiscoverySpecsComplainTest {
     val yaml = Yaml()
 
-    val testDataDir = File("specs/testData")
+    val testDataDir = File("specs/testData/v01")
 
     @TestFactory
     fun send() = testFactory {
